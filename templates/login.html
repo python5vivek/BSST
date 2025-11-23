@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSST - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bsst-blue: #1a4b8c;
+            --bsst-light-blue: #2c6fb7;
+            --bsst-gray: #f5f7fa;
+        }
+        
+        body {
+            background-color: var(--bsst-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .bsst-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .bsst-logo h2 {
+            color: var(--bsst-blue);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .bsst-logo p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .form-control {
+            padding: 12px 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--bsst-light-blue);
+            box-shadow: 0 0 0 0.2rem rgba(26, 75, 140, 0.25);
+        }
+        
+        .btn-bsst {
+            background-color: var(--bsst-blue);
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-bsst:hover {
+            background-color: var(--bsst-light-blue);
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .login-footer a {
+            color: var(--bsst-blue);
+            text-decoration: none;
+        }
+        
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .form-check-label {
+            font-size: 14px;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .divider span {
+            padding: 0 10px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .alert {
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="bsst-logo">
+                <h2>BSST</h2>
+                <p>Welcome back! Please sign in to your account.</p>
+            </div>
+            <form id="loginForm" method="post">
+                <div class="mb-3">
+                    <input type="text" class="form-control" name="username" placeholder="Username" required>
+                </div>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <input type="password" class="form-control" name="password" placeholder="Password" required>
+                </div>
+                
+                
+                <button type="submit" class="btn btn-bsst w-100">Sign In</button>
+                
+                 
+            </form>
+            <a href="/signup"><button class="btn">create an account</button></a>
+                </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSST - Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bsst-blue: #1a4b8c;
+            --bsst-light-blue: #2c6fb7;
+            --bsst-gray: #f5f7fa;
+            --bsst-green: #28a745;
+            --bsst-purple: #6f42c1;
+            --bsst-red: #dc3545;
+        }
+        
+        body {
+            background-color: var(--bsst-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            color: var(--bsst-blue);
+            font-weight: 700;
+            font-size: 24px;
+        }
+        
+        .nav-link {
+            color: #555;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--bsst-blue);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bsst-light-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, var(--bsst-blue) 0%, var(--bsst-light-blue) 100%);
+            color: white;
+            padding: 40px 0 30px;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .profile-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .profile-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 30px;
+            font-size: 40px;
+            font-weight: bold;
+            color: var(--bsst-blue);
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-details {
+            flex: 1;
+        }
+        
+        .profile-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .profile-username {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn-edit {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-edit:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        
+        .content-tabs {
+            display: flex;
+            background-color: white;
+            border-radius: 10px;
+            padding: 0;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 15px 20px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .tab-btn.active {
+            color: var(--bsst-blue);
+            background-color: #f0f7ff;
+            border-bottom: 3px solid var(--bsst-blue);
+        }
+        
+        .tab-btn:hover:not(.active) {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .post-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .post-content {
+            padding: 20px;
+        }
+        
+        .post-title {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .post-stat {
+            display: flex;
+            align-items: center;
+        }
+        
+        .post-stat i {
+            margin-right: 5px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-icon {
+            font-size: 60px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .empty-state p {
+            max-width: 400px;
+            margin: 0 auto 25px;
+        }
+        
+        .btn-primary {
+            background-color: var(--bsst-blue);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--bsst-light-blue);
+        }
+        
+        footer {
+            background-color: #1a1a1a;
+            color: #ccc;
+            padding: 40px 0 20px;
+            margin-top: 70px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-right: 20px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+        
+        @media (max-width: 768px) {
+            .profile-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">BSST</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/posts">Posts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/chat/">Chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/profile/{{request.user.username}}">Profile</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar me-3">JD</div>
+                    <a href="/logout">
+                    <button class="btn btn-outline-secondary btn-sm">Logout</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Header -->
+    <section class="profile-header">
+        <div class="profile-container">
+            <div class="profile-info">
+                <div class="profile-avatar">JD</div>
+                <div class="profile-details">
+                    <h1 class="profile-name">{{user.first_name}} {{user.last_name}}</h1>
+                    <div class="profile-username">@{{user.username}}</div>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <span class="stat-value">{{posts.count}}</span>
+                            <span class="stat-label">Posts</span>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-edit">
+                        <i class="bi bi-pencil"></i> Edit Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="profile-container">
+        <!-- Content Tabs -->
+        <div class="content-tabs">
+            <button class="tab-btn active" data-tab="my-posts">My Posts</button>
+            <button class="tab-btn" data-tab="saved-posts">Saved Posts</button>
+        </div>
+
+        <!-- My Posts Tab -->
+        <div class="tab-content active" id="my-posts">
+            <div class="posts-grid">
+                <!-- Post 1 -->
+                 {% for post in posts %}
+                <div class="post-card">
+                    <a href="/post/{{post.id}}">
+                    <img src="{{post.Image.url}}" class="post-image" alt="Colorful gradient">
+                    </a>
+                    <div class="post-content">
+                        <h3 class="post-title">{{post.title}}</h3>
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="bi bi-heart"></i> {{post.like.count}}
+                            </div>
+                            <div class="post-stat">
+                                <i class="bi bi-chat"></i> {{post.comments.count}}
+                            </div>
+                            <div class="post-stat">
+                                {{post.time}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Saved Posts Tab -->
+        <div class="tab-content" id="saved-posts">
+            <div class="posts-grid">
+                <!-- Saved Post 1 -->
+                 {% for save in saves %}
+                <div class="post-card">
+                    <img src="{{save.post.Image.url}}" class="post-image" alt="Mountain landscape">
+                    <div class="post-content">
+                        <h3 class="post-title">{{save.post.title}}</h3>
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="bi bi-heart"></i> 0
+                            </div>
+                            <div class="post-stat">
+                                <i class="bi bi-chat"></i> {{save.post.comments.count}}
+                            </div>
+                            <div class="post-stat">
+                                By {{save.post.Creature.username}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Empty state for fewer saved posts -->
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="bi bi-bookmark"></i>
+                </div>
+                <h3>Save posts you love</h3>
+                <p>When you find posts you want to revisit later, tap the bookmark icon to save them here.</p>
+                <a href="/posts">
+                <button class="btn btn-primary">Explore Posts</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update active tab button
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show active tab content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Post card click functionality
+            });
+    </script>
+</body>
+</html>

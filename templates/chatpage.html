@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSST - Community Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bsst-blue: #1a4b8c;
+            --bsst-light-blue: #2c6fb7;
+            --bsst-gray: #f5f7fa;
+            --bsst-green: #28a745;
+            --bsst-purple: #6f42c1;
+            --bsst-red: #dc3545;
+        }
+        
+        body {
+            background-color: var(--bsst-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            color: var(--bsst-blue);
+            font-weight: 700;
+            font-size: 24px;
+        }
+        
+        .nav-link {
+            color: #555;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--bsst-blue);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bsst-light-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .page-header {
+            padding: 40px 0 30px;
+            background: linear-gradient(135deg, var(--bsst-blue) 0%, var(--bsst-light-blue) 100%);
+            color: white;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .page-header p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .post-message-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .post-message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .current-user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--bsst-light-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .current-user-info h4 {
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .current-user-info p {
+            margin-bottom: 0;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .message-input {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            resize: none;
+            min-height: 100px;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        .message-input:focus {
+            outline: none;
+            border-color: var(--bsst-light-blue);
+        }
+        
+        .post-message-btn {
+            background-color: var(--bsst-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .post-message-btn:hover {
+            background-color: var(--bsst-light-blue);
+        }
+        
+        .post-message-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .messages-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .messages-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .messages-header h3 {
+            margin-bottom: 0;
+            color: #333;
+        }
+        
+        .messages-count {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .message-card {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #f0f0f0;
+            transition: background-color 0.3s;
+        }
+        
+        .message-card:hover {
+            background-color: #fafafa;
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .message-user-info {
+            flex: 1;
+        }
+        
+        .message-username {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+        
+        .message-time {
+            color: #888;
+            font-size: 13px;
+        }
+        
+        .message-content {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 0;
+            white-space: pre-wrap;
+        }
+        
+        .message-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .message-action {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 13px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .message-action:hover {
+            color: #333;
+        }
+        
+        .empty-messages {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-icon {
+            font-size: 60px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-messages h4 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .empty-messages p {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        footer {
+            background-color: #1a1a1a;
+            color: #ccc;
+            padding: 40px 0 20px;
+            margin-top: 70px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-right: 20px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+        
+        .character-count {
+            text-align: right;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 576px) {
+            .message-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .message-avatar {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">BSST</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/posts">Posts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/chat/">Chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile/{{request.user.username}}">Profile</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar me-3">JD</div>
+                    <a href = "/logout">
+                    <button class="btn btn-outline-secondary btn-sm">Logout</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container text-center">
+            <h1>Community Chat</h1>
+            <p>Share your thoughts, ask questions, and connect with the BSST community.</p>
+        </div>
+    </section>
+
+    <!-- Chat Container -->
+    <div class="chat-container">
+        <!-- Post Message Card -->
+        <div class="post-message-card">
+            <div class="post-message-header">
+                <div class="current-user-avatar">JD</div>
+                <div class="current-user-info">
+                    <h4>{{request.user.first_name}} {{request.user.last_name}}</h4>
+                    <p>Posting as @{{request.username}}</p>
+                </div>
+            </div>
+            
+            <form id="messageForm" method="post">
+                <textarea class="message-input" id="messageInput" name = "text" placeholder="What's on your mind? Share your thoughts with the community..." maxlength="1000"></textarea>
+                <div class="character-count">
+                    <span id="charCount">0</span>/1000 characters
+                </div>
+                {% csrf_token %}
+                <button type="submit" class="post-message-btn" >
+                    <i class="bi bi-send"></i> Post Message
+                </button>
+            </form>
+        </div>
+        
+        <!-- Messages Container -->
+        <div class="messages-container">
+            <div class="messages-header">
+                <h3>Community Messages</h3>
+                <div class="messages-count" id="messagesCount">6 messages</div>
+            </div>
+            
+            <!-- Message 1 -->
+            {% for chat in chats %}
+            <div class="message-card">
+                <div class="message-header">
+                    <div class="message-avatar">AJ</div>
+                    <div class="message-user-info">
+                        <div class="message-username">{{chat.poster.first_name}} {{chat.poster.last_name}}</div>
+                        <div class="message-time">{{chat.posted_at}}</div>
+                    </div>
+                </div>
+                <p class="message-content">{{chat.Chat}}</p>
+                <div class="message-actions">
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- Empty state (hidden by default) -->
+            <div class="empty-messages" id="emptyMessages" style="display: none;">
+                <div class="empty-icon">
+                    <i class="bi bi-chat"></i>
+                </div>
+                <h4>No messages yet</h4>
+                <p>Be the first to start a conversation! Share your thoughts with the community.</p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messageForm = document.getElementById('messageForm');
+            const messageInput = document.getElementById('messageInput');
+            const postMessageBtn = document.getElementById('postMessageBtn');
+            const charCount = document.getElementById('charCount');
+            const messagesCount = document.getElementById('messagesCount');
+            const emptyMessages = document.getElementById('emptyMessages');
+            const messagesContainer = document.querySelector('.messages-container');
+            
+            // Character count and validation
+            
+            
+            // Form submission
+            
+            // Add new message function
+                // Add the new message to the top of the messages container
+                
+                // Update messages count
+                const messageCards = messagesContainer.querySelectorAll('.message-card');
+                messagesCount.textContent = `${messageCards.length} messages`;
+                
+                // Add click event for like buttons in the new message
+            }
+        )
+            // Format time function
+            
+            // Add like functionality to existing messages
+           
+    </script>
+</body>
+</html>

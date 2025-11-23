@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSST - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bsst-blue: #1a4b8c;
+            --bsst-light-blue: #2c6fb7;
+            --bsst-gray: #f5f7fa;
+            --bsst-green: #28a745;
+            --bsst-purple: #6f42c1;
+        }
+        
+        body {
+            background-color: var(--bsst-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            color: var(--bsst-blue);
+            font-weight: 700;
+            font-size: 24px;
+        }
+        
+        .nav-link {
+            color: #555;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--bsst-blue);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bsst-light-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .hero-section {
+            padding: 80px 0 50px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--bsst-blue) 0%, var(--bsst-light-blue) 100%);
+            color: white;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 50px;
+        }
+        
+        .hero-section h1 {
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .hero-section p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        .feature-cards {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 32px;
+            color: white;
+        }
+        
+        .chat-icon {
+            background: linear-gradient(135deg, var(--bsst-green) 0%, #20c997 100%);
+        }
+        
+        .post-icon {
+            background: linear-gradient(135deg, var(--bsst-purple) 0%, #a370f7 100%);
+        }
+        
+        .feature-card h3 {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .feature-card p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .btn-feature {
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-chat {
+            background-color: var(--bsst-green);
+            color: white;
+        }
+        
+        .btn-chat:hover {
+            background-color: #218838;
+            color: white;
+        }
+        
+        .btn-post {
+            background-color: var(--bsst-purple);
+            color: white;
+        }
+        
+        .btn-post:hover {
+            background-color: #5a32a3;
+            color: white;
+        }
+        
+        .recent-activity {
+            max-width: 1000px;
+            margin: 70px auto 50px;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .activity-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        
+        .activity-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-content h5 {
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .activity-content p {
+            margin-bottom: 0;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .activity-time {
+            color: #999;
+            font-size: 12px;
+        }
+        
+        footer {
+            background-color: #1a1a1a;
+            color: #ccc;
+            padding: 40px 0 20px;
+            margin-top: 70px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-right: 20px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+        
+        @media (max-width: 768px) {
+            .feature-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-section {
+                padding: 60px 0 30px;
+            }
+            
+            .hero-section h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">BSST</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Notifications</a>
+                    </li>
+                    {% if autherized %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile/{{request.user.username}}">Profile</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar me-3">JD</div>
+                    {% if autherized %}
+                    <a href="/logout">
+                    <button class="btn btn-outline-secondary btn-sm">Logout</button>
+                    </a>
+                    {% else %}
+                    <a href="/signup">
+                    <button class="btn btn-outline-secondary btn-sm">Signup</button>
+                    </a>
+                    <a href="/login">
+                    <button class="btn btn-outline-secondary btn-sm">Login</button>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1>Welcome to BSST</h1>
+            <p>Connect, share, and communicate with your community. Choose how you want to engage today.</p>
+            
+            <div class="feature-cards">
+                <div class="feature-card" id="chatCard">
+                    <div class="feature-icon chat-icon">
+                        <i class="bi bi-chat-dots"></i>
+                    </div>
+                    <h3>Chat</h3>
+                    <p>Connect with others through . Start conversations, join groups.</p>
+                    <a href="/chat/">
+                    <button class="btn btn-feature btn-chat">Open Chat</button>
+                    </a>
+                </div>
+                
+                <div class="feature-card" id="postCard">
+                    <div class="feature-icon post-icon">
+                        <i class="bi bi-pencil-square"></i>
+                    </div>
+                    <h3>Post</h3>
+                    <p>Share your thoughts, ideas, and updates with the community. Create engaging content and start discussions.</p>
+                    <a href="/posts">
+                    <button class="btn btn-feature btn-post">Create/Watch Post</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+            
+            // Make the entire card clickable
+            document.querySelectorAll('.feature-card .btn-feature').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent triggering the card click event twice
+                });
+            });
+        ;
+    </script>
+</body>
+</html>

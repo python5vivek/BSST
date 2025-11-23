@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSST - Post Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bsst-blue: #1a4b8c;
+            --bsst-light-blue: #2c6fb7;
+            --bsst-gray: #f5f7fa;
+            --bsst-green: #28a745;
+            --bsst-purple: #6f42c1;
+            --bsst-red: #dc3545;
+        }
+        
+        body {
+            background-color: var(--bsst-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            color: var(--bsst-blue);
+            font-weight: 700;
+            font-size: 24px;
+        }
+        
+        .nav-link {
+            color: #555;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--bsst-blue);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bsst-light-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .post-detail-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .post-detail-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (min-width: 992px) {
+            .post-detail-card {
+                flex-direction: row;
+                min-height: 600px;
+            }
+        }
+        
+        .post-image-section {
+            flex: 1;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            min-height: 400px;
+        }
+        
+        .post-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        
+        .post-content-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 600px;
+        }
+        
+        .post-header {
+            padding: 25px 25px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .post-user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .post-user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .post-user-details h4 {
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .post-user-details p {
+            margin-bottom: 0;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .post-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 25px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #666;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            transition: color 0.3s;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+        
+        .action-btn:hover {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .action-btn i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .action-btn.liked {
+            color: var(--bsst-red);
+        }
+        
+        .action-btn.saved {
+            color: var(--bsst-blue);
+        }
+        
+        .post-stats {
+            padding: 10px 25px;
+            color: #666;
+            font-size: 14px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comments-section {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 25px;
+        }
+        
+        .comments-header {
+            padding: 20px 0 15px;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+        
+        .comment {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .comment-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #555;
+            flex-shrink: 0;
+        }
+        
+        .comment-content {
+            flex: 1;
+        }
+        
+        .comment-user {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+        
+        .comment-text {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .comment-action {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+        
+        .comment-action:hover {
+            color: #333;
+        }
+        
+        .comment-time {
+            color: #888;
+            font-size: 12px;
+        }
+        
+        .add-comment {
+            padding: 20px 25px;
+            border-top: 1px solid #eee;
+            background-color: #f8f9fa;
+        }
+        
+        .comment-form {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .comment-input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 12px 18px;
+            font-size: 15px;
+            resize: none;
+            height: 45px;
+        }
+        
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--bsst-light-blue);
+        }
+        
+        .comment-submit {
+            background-color: var(--bsst-blue);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 0 20px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .comment-submit:hover {
+            background-color: var(--bsst-light-blue);
+        }
+        
+        .comment-submit:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .back-btn {
+            margin-bottom: 20px;
+            background: none;
+            border: none;
+            color: var(--bsst-blue);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+        }
+        
+        .back-btn i {
+            margin-right: 8px;
+        }
+        
+        footer {
+            background-color: #1a1a1a;
+            color: #ccc;
+            padding: 40px 0 20px;
+            margin-top: 70px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-right: 20px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+        
+        .empty-comments {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .empty-comments i {
+            font-size: 40px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .empty-comments p {
+            margin-bottom: 0;
+        }
+        
+        /* Image zoom functionality */
+        .image-zoom-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .zoom-controls {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .post-image-section:hover .zoom-controls {
+            opacity: 1;
+        }
+        
+        .zoom-btn {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        
+        .zoom-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">BSST</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/posts">Posts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/chat/">Chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile/{{request.user.username}}">Profile</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar me-3">JD</div>
+                    <a href="/logout">
+                    <button class="btn btn-outline-secondary btn-sm">Logout</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Post Detail Content -->
+    <div class="post-detail-container">
+        <a href="/posts">
+        <button class="back-btn">
+            <i class="bi bi-arrow-left"></i> Back to Posts
+        </button>
+        </a>
+        <div class="post-detail-card">
+            <!-- Image Section -->
+            <div class="post-image-section">
+                <div class="image-zoom-container">
+                    <img src="{{post.Image.url}}" 
+                         class="post-image" 
+                         id="postImage"
+                         alt="Colorful gradient">
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" id="zoomInBtn">
+                            <i class="bi bi-zoom-in"></i>
+                        </button>
+                        <button class="zoom-btn" id="zoomOutBtn">
+                            <i class="bi bi-zoom-out"></i>
+                        </button>
+                        <button class="zoom-btn" id="resetZoomBtn">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Section -->
+            <div class="post-content-section">
+                <!-- Post Header -->
+                <div class="post-header">
+                    <div class="post-user-info">
+                        <div class="post-user-avatar">AJ</div>
+                        <div class="post-user-details">
+                            <h4>{{post.Creature.username}}</h4>
+                            <p>{{post.creat_at}}</p>
+                        </div>
+                    </div>
+                    <h1 class="post-title">{{post.title}}</h1>
+                </div>
+                
+                <!-- Post Actions -->
+                <div class="post-actions">
+                    <button class="action-btn like-btn" id="likeBtn">
+                        <i class="bi bi-heart"></i> <span id="likeCount">{{post.like.count}}</span>
+                    </button>
+                    <button class="action-btn" id="commentBtn">
+                        <i class="bi bi-chat"></i> Comment
+                    </button>
+                    {% if post.id in saved_posts %}
+    <button class="action-btn save-btn saved">
+        <i class="bi bi-bookmark"></i> Saved
+    </button>
+{% else %}
+    <a href="/save/post/{{post.id}}">
+        <button class="action-btn save-btn">
+            <i class="bi bi-bookmark"></i> Save
+        </button>
+    </a>
+{% endif %}
+                    <button class="action-btn">
+                        <i class="bi bi-share"></i> Share
+                    </button>
+                </div>
+                
+                <!-- Post Stats -->
+                <div class="post-stats">
+                    <span id="likesCount">{{post.like.count}}</span> likes • <span id="commentsCount">{{comments.count}}</span> comments
+                </div>
+                
+                <!-- Comments Section -->
+                <div class="comments-section" id="commentsContainer">
+                    <div class="comments-header">
+                        Comments (<span id="commentsHeaderCount">{{comments.count}}</span>)
+                    </div>
+                    {% for comment in comments %}
+                    <!-- Comment 1 -->
+                    <div class="comment">
+                        <div class="comment-avatar">SM</div>
+                        <div class="comment-content">
+                            <div class="comment-user">{{comment.commenter.username}}</div>
+                            <p class="comment-text">{{comment.commenting}}</p>
+                            <div class="comment-actions">
+                                <button class="comment-action">Like</button>
+                                <span class="comment-time">{{comment.created_at}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!-- Comment 2 -->
+                </div>
+                
+                <!-- Add Comment Section -->
+                 <form method="post">
+                <div class="add-comment">
+                    <div class="comment-form">
+                       {% csrf_token  %}
+                        <textarea class="comment-input" id="commentInput" name="comment" placeholder="Add a comment..."></textarea>
+                        <button class="comment-submit" type="submit">Post</button>
+                        
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Back button functionality
+            document.getElementById('backBtn').addEventListener('click', function() {
+                window.history.back();
+            });
+            
+            // Like button functionality
+            const likeBtn = document.getElementById('likeBtn');
+            const likeCount = document.getElementById('likeCount');
+            const likesCount = document.getElementById('likesCount');
+            
+            likeBtn.addEventListener('click', function() {
+                let count = parseInt(likeCount.textContent);
+                let totalLikes = parseInt(likesCount.textContent);
+                
+                if (this.classList.contains('liked')) {
+                    this.classList.remove('liked');
+                    this.querySelector('i').className = 'bi bi-heart';
+                    count--;
+                    totalLikes--;
+                } else {
+                    this.classList.add('liked');
+                    this.querySelector('i').className = 'bi bi-heart-fill';
+                    count++;
+                    totalLikes++;
+                }
+                
+                likeCount.textContent = count;
+                likesCount.textContent = totalLikes;
+            });
+            
+            // Save button functionality
+            const saveBtn = document.getElementById('saveBtn');
+            
+            saveBtn.addEventListener('click', function() {
+                if (this.classList.contains('saved')) {
+                    this.classList.remove('saved');
+                    this.querySelector('i').className = 'bi bi-bookmark';
+                    this.innerHTML = '<i class="bi bi-bookmark"></i> Save';
+                } else {
+                    this.classList.add('saved');
+                    this.querySelector('i').className = 'bi bi-bookmark-fill';
+                    this.innerHTML = '<i class="bi bi-bookmark-fill"></i> Saved';
+                }
+            });
+            
+            // Comment input validation
+            const commentInput = document.getElementById('commentInput');
+            const commentSubmit = document.getElementById('commentSubmit');
+            
+            commentInput.addEventListener('input', function() {
+                commentSubmit.disabled = this.value.trim().length === 0;
+            });
+            
+            // Post comment functionality
+            commentSubmit.addEventListener('click', function() {
+                const commentText = commentInput.value.trim();
+                
+                if (commentText) {
+                    addNewComment(commentText);
+                    commentInput.value = '';
+                    commentSubmit.disabled = true;
+                }
+            });
+            
+            // Allow pressing Enter to post comment (but allow Shift+Enter for new line)
+            commentInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    commentSubmit.click();
+                }
+            });
+            
+            // Image zoom functionality
+            const postImage = document.getElementById('postImage');
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+            const resetZoomBtn = document.getElementById('resetZoomBtn');
+            
+            let scale = 1;
+            const maxScale = 3;
+            const minScale = 1;
+            const scaleStep = 0.25;
+            
+            zoomInBtn.addEventListener('click', function() {
+                if (scale < maxScale) {
+                    scale += scaleStep;
+                    updateImageScale();
+                }
+            });
+            
+            zoomOutBtn.addEventListener('click', function() {
+                if (scale > minScale) {
+                    scale -= scaleStep;
+                    updateImageScale();
+                }
+            });
+            
+            resetZoomBtn.addEventListener('click', function() {
+                scale = 1;
+                updateImageScale();
+            });
+            
+            function updateImageScale() {
+                postImage.style.transform = `scale(${scale})`;
+                postImage.style.transition = 'transform 0.3s ease';
+            }
+            
+            // Add new comment function
+            function addNewComment(text) {
+                const commentsContainer = document.getElementById('commentsContainer');
+                const commentsHeaderCount = document.getElementById('commentsHeaderCount');
+                const commentsCount = document.getElementById('commentsCount');
+                
+                // Create new comment element
+                const newComment = document.createElement('div');
+                newComment.className = 'comment';
+                
+                newComment.innerHTML = `
+                    <div class="comment-avatar">JD</div>
+                    <div class="comment-content">
+                        <div class="comment-user">You</div>
+                        <p class="comment-text">${text}</p>
+                        <div class="comment-actions">
+                            <button class="comment-action">Like</button>
+                            <span class="comment-time">Just now</span>
+                        </div>
+                    </div>
+                `;
+                
+                // Add the new comment to the top of the comments section
+                const commentsHeader = commentsContainer.querySelector('.comments-header');
+                commentsContainer.insertBefore(newComment, commentsHeader.nextSibling);
+                
+                // Update comment counts
+                let headerCount = parseInt(commentsHeaderCount.textContent);
+                let count = parseInt(commentsCount.textContent);
+                
+                headerCount++;
+                count++;
+                
+                commentsHeaderCount.textContent = headerCount;
+                commentsCount.textContent = count;
+                
+                // Scroll to the new comment
+                newComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSST - Posts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bsst-blue: #1a4b8c;
+            --bsst-light-blue: #2c6fb7;
+            --bsst-gray: #f5f7fa;
+            --bsst-green: #28a745;
+            --bsst-purple: #6f42c1;
+            --bsst-red: #dc3545;
+        }
+        
+        body {
+            background-color: var(--bsst-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            color: var(--bsst-blue);
+            font-weight: 700;
+            font-size: 24px;
+        }
+        
+        .nav-link {
+            color: #555;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--bsst-blue);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bsst-light-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .page-header {
+            padding: 40px 0 30px;
+            background: linear-gradient(135deg, var(--bsst-blue) 0%, var(--bsst-light-blue) 100%);
+            color: white;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .page-header p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .upload-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--bsst-purple) 0%, #a370f7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 32px;
+        }
+        
+        .upload-section h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .upload-section p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        
+        .btn-upload {
+            background-color: var(--bsst-purple);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-upload:hover {
+            background-color: #5a32a3;
+            color: white;
+        }
+        
+        .posts-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .post-card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .post-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        .post-content {
+            padding: 25px;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .post-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .post-user {
+            flex: 1;
+        }
+        
+        .post-user h5 {
+            margin-bottom: 3px;
+            font-size: 16px;
+        }
+        
+        .post-user p {
+            margin-bottom: 0;
+            color: #888;
+            font-size: 13px;
+        }
+        
+        .post-options {
+            color: #888;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .post-title {
+            font-weight: 600;
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .post-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: #666;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .action-btn:hover {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .action-btn i {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .action-btn.liked {
+            color: var(--bsst-red);
+        }
+        
+        .action-btn.saved {
+            color: var(--bsst-blue);
+        }
+        
+        .comments-section {
+            padding: 0 25px 25px;
+            display: none;
+        }
+        
+        .comment {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .comment-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .comment-content {
+            flex: 1;
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 18px;
+        }
+        
+        .comment-user {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+        
+        .comment-text {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 0;
+        }
+        
+        .add-comment {
+            display: flex;
+            margin-top: 15px;
+        }
+        
+        .comment-input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        .comment-btn {
+            background-color: var(--bsst-blue);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 0 20px;
+            font-size: 14px;
+        }
+        
+        footer {
+            background-color: #1a1a1a;
+            color: #ccc;
+            padding: 40px 0 20px;
+            margin-top: 70px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-right: 20px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+        
+        @media (max-width: 768px) {
+            .post-actions {
+                flex-wrap: wrap;
+            }
+            
+            .action-btn {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="home.html">BSST</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/posts">Posts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/chat/">Chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile/{{request.user.username}}">Profile</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar me-3">JD</div>
+                    <a href="/logout">
+                    <button class="btn btn-outline-secondary btn-sm">Logout</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container text-center">
+            <h1>BSST Posts</h1>
+            <p>Share your thoughts, ideas, and updates with the community. Discover what others are posting.</p>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <div class="container">
+        <div class="upload-section">
+            <div class="upload-icon">
+                <i class="bi bi-cloud-arrow-up"></i>
+            </div>
+            <h3>Share Your Story</h3>
+            <p>Create a new post to share images, thoughts, and updates with the BSST community.</p>
+            <a href="/uploadpost">
+            <button class="btn btn-upload" id="uploadPostBtn">
+                <i class="bi bi-plus-circle me-2"></i> Create New Post
+            </button>
+            </a>
+        </div>
+    </div>
+
+    <!-- Posts Display Section -->
+    <div class="posts-container">
+        <!-- Post 2 -->
+         {% for post in posts %}
+        <div class="post-card">
+            <a href="/post/{{post.id}}">
+            <img src="{{post.Image.url}}" class="post-image" alt="Mountain landscape">
+            </a>
+            <div class="post-content">
+                <div class="post-header">
+                    <div class="post-avatar">SM</div>
+                    <div class="post-user">
+                        <h5>@{{post.Creature}}</h5>
+                        <p>{{post.creat_at}}</p>
+                    </div>
+                    <div class="post-options">
+                        <i class="bi bi-three-dots"></i>
+                    </div>
+                </div>
+                <h3 class="post-title">{{post.title}}</h3>
+
+                <div class="post-actions">
+                    <button class="action-btn like-btn" data-post="2">
+                        <i class="bi bi-heart"></i> <span class="like-count">{{post.like.count}}</span>
+                    </button>
+                    
+                    <button class="action-btn comment-btn-toggle" data-post="2">
+                        <i class="bi bi-chat"></i> <span class="comment-count">{{post.comments.count}}</span>
+                    </button>
+                    {% if post.id in saved_posts %}
+    <button class="action-btn save-btn saved">
+        <i class="bi bi-bookmark"></i> Saved
+    </button>
+{% else %}
+    <a href="/save/post/{{post.id}}">
+        <button class="action-btn save-btn">
+            <i class="bi bi-bookmark"></i> Save
+        </button>
+    </a>
+{% endif %}
+    
+
+                </div>
+            </div>
+            
+        </div>
+        {% endfor  %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Like Button Functionality
+            document.querySelectorAll('.like-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const postId = this.getAttribute('data-post');
+                    const likeCount = this.querySelector('.like-count');
+                    let count = parseInt(likeCount.textContent);
+                    
+                    if (this.classList.contains('liked')) {
+                        this.classList.remove('liked');
+                        this.querySelector('i').className = 'bi bi-heart';
+                        count--;
+                    } else {
+                        this.classList.add('liked');
+                        this.querySelector('i').className = 'bi bi-heart-fill';
+                        count++;
+                    }
+                    
+                    likeCount.textContent = count;
+                });
+            });
+            
+            // Save Button Functionality
+            document.querySelectorAll('.save-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const postId = this.getAttribute('data-post');
+                    
+                    if (this.classList.contains('saved')) {
+                        this.classList.remove('saved');
+                        this.querySelector('i').className = 'bi bi-bookmark';
+                        this.innerHTML = '<i class="bi bi-bookmark"></i> Save';
+                    } else {
+                        this.classList.add('saved');
+                        this.querySelector('i').className = 'bi bi-bookmark-fill';
+                        this.innerHTML = '<i class="bi bi-bookmark-fill"></i> Saved';
+                    }
+                });
+            });
+            
+            // Toggle Comments Section
+            document.querySelectorAll('.comment-btn-toggle').forEach(button => {
+                button.addEventListener('click', function() {
+                    const postId = this.getAttribute('data-post');
+                    const commentsSection = document.getElementById(`comments-${postId}`);
+                    
+                    if (commentsSection.style.display === 'block') {
+                        commentsSection.style.display = 'none';
+                    } else {
+                        commentsSection.style.display = 'block';
+                    }
+                });
+            });
+            
+            // Post Comment Functionality
+            document.querySelectorAll('.comment-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const commentInput = this.previousElementSibling;
+                    const commentText = commentInput.value.trim();
+                    
+                    if (commentText) {
+                        const commentsSection = this.closest('.comments-section');
+                        const newComment = document.createElement('div');
+                        newComment.className = 'comment';
+                        
+                        newComment.innerHTML = `
+                            <div class="comment-avatar">JD</div>
+                            <div class="comment-content">
+                                <div class="comment-user">You</div>
+                                <p class="comment-text">${commentText}</p>
+                            </div>
+                        `;
+                        
+                        commentsSection.insertBefore(newComment, this.parentElement);
+                        commentInput.value = '';
+                        
+                        // Update comment count
+                        const commentCount = this.closest('.post-card').querySelector('.comment-count');
+                        let count = parseInt(commentCount.textContent);
+                        count++;
+                        commentCount.textContent = count;
+                    }
+                });
+            });
+            
+            // Allow pressing Enter to post comment
+            document.querySelectorAll('.comment-input').forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        this.nextElementSibling.click();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

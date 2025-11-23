@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSST - Upload Post</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bsst-blue: #1a4b8c;
+            --bsst-light-blue: #2c6fb7;
+            --bsst-gray: #f5f7fa;
+            --bsst-green: #28a745;
+            --bsst-purple: #6f42c1;
+        }
+        
+        body {
+            background-color: var(--bsst-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            color: var(--bsst-blue);
+            font-weight: 700;
+            font-size: 24px;
+        }
+        
+        .nav-link {
+            color: #555;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--bsst-blue);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bsst-light-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .page-header {
+            padding: 40px 0 30px;
+            background: linear-gradient(135deg, var(--bsst-blue) 0%, var(--bsst-light-blue) 100%);
+            color: white;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .page-header p {
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .upload-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .upload-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            cursor: pointer;
+            background-color: #fafafa;
+        }
+        
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--bsst-purple);
+            background-color: #f0f0ff;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #aaa;
+            margin-bottom: 15px;
+            transition: color 0.3s;
+        }
+        
+        .upload-area:hover .upload-icon, .upload-area.dragover .upload-icon {
+            color: var(--bsst-purple);
+        }
+        
+        .upload-area h4 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+        
+        .upload-area p {
+            color: #777;
+            margin-bottom: 20px;
+        }
+        
+        .btn-browse {
+            background-color: var(--bsst-purple);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-browse:hover {
+            background-color: #5a32a3;
+            color: white;
+        }
+        
+        .image-preview {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .remove-image {
+            margin-top: 15px;
+            background: none;
+            border: none;
+            color: var(--bsst-red);
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .remove-image:hover {
+            text-decoration: underline;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .form-control {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--bsst-light-blue);
+            box-shadow: 0 0 0 0.2rem rgba(26, 75, 140, 0.25);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn-cancel {
+            background-color: #f8f9fa;
+            color: #555;
+            border: 1px solid #ddd;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #e9ecef;
+        }
+        
+        .btn-post {
+            background-color: var(--bsst-blue);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-post:hover {
+            background-color: var(--bsst-light-blue);
+        }
+        
+        .btn-post:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .file-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        footer {
+            background-color: #1a1a1a;
+            color: #ccc;
+            padding: 40px 0 20px;
+            margin-top: 70px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-right: 20px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+        
+        .upload-progress {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            background-color: var(--bsst-purple);
+        }
+        
+        @media (max-width: 576px) {
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .action-buttons button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">BSST</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/posts">Posts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/chat/">Chat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile/{{request.user.username}}">Profile</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="user-avatar me-3">JD</div>
+                    <a href = "/logout">
+                    <button class="btn btn-outline-secondary btn-sm">Logout</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container text-center">
+            <h1>Upload a New Post</h1>
+            <p>Share your image with the BSST community. Add a title to make it engaging.</p>
+        </div>
+    </section>
+
+    <!-- Upload Form -->
+    <div class="upload-container">
+        <div class="upload-card">
+            <form id="uploadForm" method="post" enctype="multipart/form-data">
+                <!-- Image Upload Area -->
+                <div class="form-group">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="bi bi-cloud-arrow-up upload-icon"></i>
+                        <h4>Upload your image</h4>
+                        <p>Drag & drop your image here or click to browse</p>
+                        <button type="button" class="btn btn-browse" id="browseBtn">Browse Files</button>
+                        <input type="file" id="imageInput" name="Image"  accept="image/*" style="display: none;">
+                        <div class="file-info" id="fileInfo"></div>
+                    </div>
+                    
+                    <!-- Image Preview -->
+                    <div class="image-preview" id="imagePreview">
+                        <img src="" class="preview-image" id="previewImage" alt="Preview">
+                        <button type="button" class="remove-image" id="removeImage">
+                            <i class="bi bi-x-circle"></i> Remove Image
+                        </button>
+                    </div>
+                    
+                    <!-- Upload Progress -->
+                    <div class="upload-progress" id="uploadProgress">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="text-center mt-2" id="progressText">Uploading... 0%</div>
+                    </div>
+                </div>
+                {%  csrf_token  %}
+                <!-- Title Input -->
+                <div class="form-group">
+                    <label for="postTitle" class="form-label">Post Title</label>
+                    <input type="text" class="form-control" id="postTitle" name = 'title' placeholder="Enter a title for your post" maxlength="100" required>
+                    <div class="text-end mt-1">
+                        <small><span id="titleCount">0</span>/100 characters</small>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-cancel" id="cancelBtn">
+                        <i class="bi bi-arrow-left"></i> Back to Posts
+                    </button>
+                    <button type="submit" class="btn btn-post">
+                        <i class="bi bi-check-circle"></i> Post to BSST
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('uploadArea');
+            const browseBtn = document.getElementById('browseBtn');
+            const imageInput = document.getElementById('imageInput');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewImage = document.getElementById('previewImage');
+            const removeImage = document.getElementById('removeImage');
+            const fileInfo = document.getElementById('fileInfo');
+            const postTitle = document.getElementById('postTitle');
+            const titleCount = document.getElementById('titleCount');
+            const postBtn = document.getElementById('postBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const uploadForm = document.getElementById('uploadForm');
+            const uploadProgress = document.getElementById('uploadProgress');
+            const progressBar = document.querySelector('.progress-bar');
+            const progressText = document.getElementById('progressText');
+            
+            // Browse button click
+            browseBtn.addEventListener('click', function() {
+                imageInput.click();
+            });
+            
+            // File input change
+            imageInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    handleFileSelection(this.files[0]);
+                }
+            });
+            
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    handleFileSelection(e.dataTransfer.files[0]);
+                }
+            });
+            
+            // Remove image
+            removeImage.addEventListener('click', function() {
+                imagePreview.style.display = 'none';
+                imageInput.value = '';
+                fileInfo.textContent = '';
+                updatePostButtonState();
+            });
+            
+            // Title input character count
+            postTitle.addEventListener('input', function() {
+                const count = this.value.length;
+                titleCount.textContent = count;
+                updatePostButtonState();
+            });
+            
+            // Cancel button
+            cancelBtn.addEventListener('click', function() {
+                 
+                    window.location.href = '/posts';
+            });
+            
+            // Form submission
+            
+            // Handle file selection
+            function handleFileSelection(file) {
+                // Check if file is an image
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file (JPEG, PNG, GIF, etc.)');
+                    return;
+                }
+                
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size too large. Please select an image smaller than 5MB.');
+                    return;
+                }
+                
+                // Display file info
+                const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+                fileInfo.textContent = `Selected: ${file.name} (${fileSize} MB)`;
+                
+                // Preview image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+                
+                updatePostButtonState();
+            }
+            
+            // Update post button state based on form validity
+            function updatePostButtonState() {
+                const hasImage = imageInput.files.length > 0;
+                const hasTitle = postTitle.value.trim().length > 0;
+                
+                postBtn.disabled = !(hasImage && hasTitle);
+            }
+            
+            // Simulate upload process
+            function simulateUpload() {
+                // Show progress bar
+                uploadProgress.style.display = 'block';
+                postBtn.disabled = true;
+                
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        
+                        // Complete upload
+                        progressBar.style.width = '100%';
+                        progressText.textContent = 'Upload Complete!';
+                        
+                        // Show success message and redirect
+                        setTimeout(() => {
+                            window.location.href = '/posts';
+                        }, 1000);
+                    } else {
+                        progressBar.style.width = progress + '%';
+                        progressBar.setAttribute('aria-valuenow', progress);
+                        progressText.textContent = `Uploading... ${Math.round(progress)}%`;
+                    }
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>
